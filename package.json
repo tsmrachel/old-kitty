@@ -1,0 +1,33 @@
+{
+  "name": "kitty",
+  "version": "",
+  "description": "",
+  "author": "Rachel",
+  "dependencies": {
+    "react": "x.x.x",
+    "browserify": "x.x.x"
+  },
+  "devDependencies": {
+    "del": "x.x.x",
+    "gulp": "^3.9.1",
+    "gulp-babel": "x.x.x",
+    "babel-plugin-transform-react-jsx" : "x.x.x",
+    "gulp-cache": "x.x.x",
+    "gulp-clean-css": "x.x.x",
+    "gulp-concat": "x.x.x",
+    "gulp-connect": "x.x.x",
+    "gulp-htmlmin": "x.x.x",
+    "gulp-livereload": "x.x.x",
+    "gulp-load-plugins": "x.x.x",
+    "gulp-notify": "x.x.x",
+    "gulp-rename": "x.x.x",
+    "gulp-ruby-sass": "x.x.x",
+    "gulp-strip-css-comments": "x.x.x",
+    "gulp-strip-debug": "x.x.x",
+    "gulp-uglify": "x.x.x",
+    "gulp-webdriver":"x.x.x",
+    "wdio-jasmine-framework" :"x.x.x",
+    "wdio-selenium-standalone-service":"x.x.x",
+    "tiny-lr": "x.x.x"
+  }
+}
