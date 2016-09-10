@@ -2,9 +2,9 @@ var createStore = Redux.createStore;
 var Provider = ReactRedux.Provider;
 var combineReducers = Redux.combineReducers;
 var connect = ReactRedux.connect;
-var Router = ReactRouter.Router,
-  Route = ReactRouter.Route,
-  BrowserHistory = ReactRouter.browserHistory;
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+var BrowserHistory = ReactRouter.browserHistory;
 var Link = ReactRouter.Link;
 
 function roundToTwo(num) {
@@ -22,10 +22,8 @@ var getMagicKey = function() {
   magicKey += 1;
   return magicKey;
 };
-var quotes = "hello";
-var expenseId = 1;
 
-
+var expenseId = 1; //will cause issues? should take last expenseId
 
 userData = {
   id: 1,

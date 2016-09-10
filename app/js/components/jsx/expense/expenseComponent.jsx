@@ -65,13 +65,13 @@ var MultiSelector = React.createClass({
   },
   render: function() {
 
-    var divStyle = {
+    var multiselectorDivStyle = {
       marginBottom: "1rem"
     };
 
     var classes = "input-field col s6 offset-s2 " + this.props.ftestClass;
 
-    return ( <div className={ classes } style={ divStyle }>
+    return ( <div className={ classes } style={ multiselectorDivStyle }>
                { this.props.items.map(this.renderOptions) }
              </div>);
   }
@@ -95,7 +95,7 @@ var ButtonGroupSelect = React.createClass({
       selectedLabel: this.props.initialSelected
     };
   },
-  _onClick: function(e) {
+  onClick: function(e) {
 
     var ButtonGroupSelectValue = e.target.getAttribute("data-Value");
 
@@ -121,21 +121,21 @@ var ButtonGroupSelect = React.createClass({
   },
   renderButtonGroup: function(item) {
 
-    var classes = "waves-effect waves-light btn-large";
+    var buttonClasses = "waves-effect waves-light btn-large";
 
     if (item.label !== this.state.selectedLabel) {
-      classes += " disabled";
+      buttonClasses += " disabled";
     }
 
-    return ( <button data-Value={ item.label } key={ item.label } onClick={ this._onClick } className={ classes }>
+    return ( <button data-Value={ item.label } key={ item.label } onClick={ this.onClick } className={ buttonClasses }>
                { item.label }
              </button>);
   },
   render: function() {
 
-    var classes = "input-field col s12 valign-wrapper " + this.props.ftestClass;
+    var buttonGroupSelectclasses = "input-field col s12 valign-wrapper " + this.props.ftestClass;
 
-    return ( <div className={ classes }>
+    return ( <div className={ buttonGroupSelectclasses }>
                <span className="col s1 valign">{ this.props.title }</span>
                <span className="col s10 offset-s1">{ this.props.items.map(this.renderButtonGroup) }</span>
              </div>);
@@ -144,13 +144,13 @@ var ButtonGroupSelect = React.createClass({
 });
 
 var Shared = React.createClass({
-  _Yes: function(e) {
+  yes: function(e) {
     console.log("yay!");
 
   },
   render: function() {
 
-    return ( <ButtonGroupSelect {...this.props } title="Shared" items={ [{ label: "Yes", onItemClick: this._Yes }, { label: "No", onItemClick: null }] } />
+    return ( <ButtonGroupSelect {...this.props } title="Shared" items={ [{ label: "Yes", onItemClick: this.yes }, { label: "No", onItemClick: null }] } />
       );
   }
 });
@@ -222,11 +222,10 @@ var SplitAmountInput = React.createClass({
 
     tripData.people.map(function(person) {
 
-      if (!!newState[person]) {
-
-      } else {
+      if (newState[person]) {
         newState[person] = 0;
       }
+
     });
 
     return newState;
@@ -235,28 +234,20 @@ var SplitAmountInput = React.createClass({
 
     //to do : input validation
     var newValue = event.target.value;
-
     var itemId = event.target.getAttribute("data-itemId");
+    var newSplitAmountInputState = {};
+    var newInputState = {};
 
     if (itemId == "Me") {
       itemId = userData.name;
     }
-    var newSplitAmountInputState = {};
-    var newInputState = {};
 
     if (newValue == "") {
       newValue = 0;
     }
     newInputState[itemId] = newValue;
-
     this.setState(newInputState);
-
-    //to do : optimize / reformat
-
     newSplitAmountInputState = Object.assign({}, this.state, newInputState);
-
-    //json stringify to remove undefined properties
-    // newSplitAmountInputState = JSON.parse(JSON.stringify(newSplitAmountInputState));
 
     if (!!this.props.onSelectItem) {
 
@@ -283,12 +274,12 @@ var SplitAmountInput = React.createClass({
   },
   render: function() {
 
-    var divStyle = {
+    var splitAmountInputDivStyle = {
       marginTop: "2rem",
       marginBottom: "2rem"
     };
 
-    return ( <div className="input-field col s6 offset-s2 ftest-splitAmountInput" style={ divStyle }>
+    return ( <div className="input-field col s6 offset-s2 ftest-splitAmountInput" style={ splitAmountInputDivStyle }>
                { this.props.items.map(this.renderSplitAmountGroup) }
              </div>
       );
@@ -333,7 +324,6 @@ var DescriptionInput = React.createClass({
 });
 
 var Expense = React.createClass({
-  _edit: function() {},
   render: function() {
 
     console.log(this.props.data.expenseId);
@@ -370,7 +360,7 @@ var AddExpensePage = React.createClass({
 
     //todo : clean up
 
-    if (!!this.props.params.expenseId) {
+    if (!!this.props.params.expenseId) { //if expenseId has been passed in, it is an edits
 
       var paramExpenseId = this.props.params.expenseId;
       initialState = store.getState().data.filter(function(obj) {
@@ -386,7 +376,7 @@ var AddExpensePage = React.createClass({
 
     return initialState;
   },
-  _delete() {
+  delete() {
 
     store.dispatch({
       type: "DELETE_EXPENSE",
@@ -396,7 +386,7 @@ var AddExpensePage = React.createClass({
     BrowserHistory.push("/");
 
   },
-  _save() {
+  save() {
 
     var newState = this.state;
 
@@ -422,22 +412,15 @@ var AddExpensePage = React.createClass({
         newSplitAmount[person] = eachPersonPaid;
 
       });
-
-      console.log(newSplitAmount);
       newState.splitAmount = newSplitAmount;
 
     }
 
     if (!!this.props.params.expenseId) { //if edit
 
-      console.log("dispatch EDIT_EXPENSE");
-
       var editExpenseState = {};
       editExpenseState.previousState = this.previousStateIfExists;
       editExpenseState.newState = newState;
-
-      console.log("editExpenseState : ");
-      console.log(editExpenseState);
 
       store.dispatch({
         type: "EDIT_EXPENSE",
@@ -462,34 +445,30 @@ var AddExpensePage = React.createClass({
   updateAddExpensePage(stateKey, stateValue) {
     //setState is asynchronous
 
-    console.log("stateKey : " + stateKey);
-    console.log("stateValue : ");
-    console.log(stateValue);
-
     var newState = {};
     newState[stateKey] = stateValue;
-
-    console.log("newStateInUpdateExpense :");
-    console.log(newState);
 
     this.setState(newState);
 
   },
   render: function() {
 
-    var amongstFields = null;
-
     var splitAmountInputPeople = tripData.peopleWithMe;
-
+    var amongstFields = null;
     var deleteButton = null;
-
-    var divStyle = {
+    var sharedFields = null;
+    var splitFields = null;
+    var paidByFields = null;
+    var deleteButtonDivStyle = {
       marginTop: "2rem",
       marginBottom: "2rem"
     };
+    var upperMarginDivStyle = {
+      marginTop: "2rem"
+    };
 
     if (!!this.props.params.expenseId) {
-      deleteButton = (<button className="input-field waves-effect waves-light btn-large col s12 ftest-deleteButton" onClick={ this._delete } style={ divStyle }>
+      deleteButton = (<button className="input-field waves-effect waves-light btn-large col s12 ftest-deleteButton" onClick={ this.delete } style={ deleteButtonDivStyle }>
                         Delete
                       </button>);
     }
@@ -503,14 +482,9 @@ var AddExpensePage = React.createClass({
       );
     }
 
-    var sharedFields = null;
-
-    var splitFields = null;
-
     if (this.state.split == "Differently") {
       splitFields = (
-        <SplitAmountInput stateKey="splitAmount" items={ splitAmountInputPeople } initialValue={ this.state.splitAmount } onSelectItem={ this.updateAddExpensePage }
-        />
+        <SplitAmountInput stateKey="splitAmount" items={ splitAmountInputPeople } initialValue={ this.state.splitAmount } onSelectItem={ this.updateAddExpensePage } />
       );
     }
 
@@ -528,8 +502,6 @@ var AddExpensePage = React.createClass({
 
     }
 
-    var paidByFields = null;
-
     if (this.state.paidBy === "Someone Else") {
       paidByFields = (
         <MultiSelector stateKey="paidByWho" selectionMode="single" items={ tripData.otherPeople } selected={ this.state.paidByWho } onSelectItem={ this.updateAddExpensePage } ftestClass="ftest-paidByWho"
@@ -538,21 +510,17 @@ var AddExpensePage = React.createClass({
 
     }
 
-    var divStyle = {
-      marginTop: "2rem"
-    };
-
     return (
       <div>
         <Navbar title="Expense" />
-        <div className="row container" style={ divStyle }>
+        <div className="row container" style={ upperMarginDivStyle }>
           <AmountInput stateKey="amount" initialValue={ this.state.amount } onSelectItem={ this.updateAddExpensePage } />
           <DescriptionInput stateKey="description" initialValue={ this.state.description } onSelectItem={ this.updateAddExpensePage } />
           <Shared stateKey="shared" initialSelected={ this.state.shared } onSelectItem={ this.updateAddExpensePage } ftestClass="ftest-shared" />
           { sharedFields }
           <PaidBy stateKey="paidBy" initialSelected={ this.state.paidBy } onSelectItem={ this.updateAddExpensePage } ftestClass="ftest-paidBy" />
           { paidByFields }
-          <button className="waves-effect waves-light btn-large col s12 ftest-saveButton" onClick={ this._save } style={ divStyle }>
+          <button className="waves-effect waves-light btn-large col s12 ftest-saveButton" onClick={ this.save } style={ upperMarginDivStyle }>
             Save
           </button>
           { deleteButton }

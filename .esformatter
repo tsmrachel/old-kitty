@@ -45,10 +45,9 @@
       "Property": "<=1"
     },
     "after": {
-      "ReturnStatement": 1,
       "IfStatement": "1",
       "FunctionDeclarationOpeningBrace": "1",
-      "FunctionDeclarationClosingBrace": "2"
+      "FunctionDeclarationClosingBrace": "1"
     }
   }
 }

@@ -21,6 +21,7 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
       var newState = Object.assign([], state, newExpenses);
 
       return newState;
+
     case "EDIT_EXPENSE":
 
       var newState = Object.assign([], state);
@@ -35,6 +36,7 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
       newState[indexOfObj] = action.data.newState;
 
       return newState;
+
     case "DELETE_EXPENSE":
 
       var newState = Object.assign([], state);
@@ -51,6 +53,7 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
       }
 
       return newState;
+
     default:
 
       return state;
