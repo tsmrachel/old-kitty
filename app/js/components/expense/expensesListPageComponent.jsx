@@ -1,18 +1,10 @@
-var ExpensesList = React.createClass({
-  renderExpenses: function(expense) {
-
-    return ( <Expense key={ getMagicKey() } data={ expense } /> );
-  },
-  render: function() {
-
-    return ( <ul className="collection ftest-expenseList">
-               { this.props.data.map(this.renderExpenses) }
-               </ul>
-      );
-  }
-});
+var React = require("react");
+var BrowserHistory = require('react-router').browserHistory
+var Navbar = require('components/navbarComponent.jsx');
+var ExpensesList = require('components/expense/expensesListComponent.jsx');
 
 var ExpensesListPage = React.createClass({
+
   _onClick: function() {
     BrowserHistory.push("addExpense");
   },
@@ -38,3 +30,5 @@ var ExpensesListPage = React.createClass({
       );
   }
 });
+
+module.exports = ExpensesListPage;

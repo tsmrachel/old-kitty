@@ -1,3 +1,7 @@
+var React = require("react");
+var Navbar = require('components/navbarComponent.jsx');
+var connect = require('react-redux').connect;
+
 var LedgerPage = React.createClass({
   renderEachPerson: function(ledgerObj) {
 
@@ -49,3 +53,12 @@ var LedgerPage = React.createClass({
 
 });
 
+var mapStateToLedgerProps = function(state) {
+  return {
+    data: state.ledger
+  };
+};
+
+var LedgerPage = connect(mapStateToLedgerProps)(LedgerPage);
+
+module.exports = LedgerPage;

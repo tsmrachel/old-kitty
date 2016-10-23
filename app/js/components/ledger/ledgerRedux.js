@@ -18,12 +18,12 @@ var minusExpense = function(state, action) {
 
   var newState = Object.assign({}, state);
   var actionData = (!!action.data.previousState) ? action.data.previousState : action.data;
-  var owesWho = (actionData.paidBy == "Me") ? userData.name : actionData.paidByWho[0];
+  var owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
   var peopleSharingExpense = actionData.splitAmount;
 
   for (var person in peopleSharingExpense) {
 
-    if (person == "Me") {
+    if (person === "Me") {
       person = userData.name;
     }
 
@@ -40,12 +40,12 @@ var addExpense = function(state, action) {
 
   var newState = Object.assign({}, state);
   var actionData = (!!action.data.newState) ? action.data.newState : action.data;
-  var owesWho = (actionData.paidBy == "Me") ? userData.name : actionData.paidByWho[0];
+  var owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
   var peopleSharingExpense = actionData.splitAmount;
 
   for (var person in peopleSharingExpense) {
 
-    if (person == "Me") {
+    if (person === "Me") {
       person = userData.name;
     }
 
@@ -85,10 +85,4 @@ var ledgerReducer = function(state = ledgerInitialState, action) {
 
 };
 
-var mapStateToLedgerProps = function(state) {
-  return {
-    data: state.ledger
-  };
-};
-
-var LedgerPage = connect(mapStateToLedgerProps)(LedgerPage);
+module.exports = ledgerReducer;

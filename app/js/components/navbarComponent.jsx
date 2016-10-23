@@ -1,3 +1,6 @@
+var React = require("react");
+var Link = require('react-router').Link;
+
 var Navbar = React.createClass({
   render: function() {
 
@@ -6,7 +9,7 @@ var Navbar = React.createClass({
 
     };
 
-    if (this.props.title == "Expenses") {
+    if (this.props.title === "Expenses") {
 
       var rightMenu = ( <li>
                           <Link to="/ledger">
@@ -27,3 +30,5 @@ var Navbar = React.createClass({
       </nav>            );
   }
 });
+
+module.exports = Navbar;

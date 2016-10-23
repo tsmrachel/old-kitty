@@ -1,82 +1,13 @@
-var MultiSelector = React.createClass({
-  propTypes: {
-    stateKey: React.PropTypes.string.isRequired,
-    items: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    onSelectItem: React.PropTypes.func.isRequired,
-    selectionMode: React.PropTypes.oneOf(["multiple", "single"]),
-    ftestClass: React.PropTypes.string.isRequired
-  },
-  getInitialState: function() {
-    return {
-      selected: this.props.selected
-    };
-  },
-  handleChange: function(event) {
+var React = require("react");
+var BrowserHistory = require('react-router').browserHistory
+var connect = require('react-redux').connect;
 
-    var checkedWillBe = event.target.checked;
-    var newSelected = this.state.selected;
-    var itemId = event.target.getAttribute("data-item");
+var Navbar = require('components/navbarComponent.jsx');
 
-    if (checkedWillBe == true) {
-
-      if (this.props.selectionMode == "single") {
-        newSelected = [];
-      }
-
-      newSelected.push(itemId);
-
-    } else {
-
-      var index = newSelected.indexOf(itemId);
-      if (index > -1) {
-        newSelected.splice(index, 1);
-      }
-    }
-
-    this.setState({
-      selected: newSelected
-    });
-
-    if (!!this.props.onSelectItem) {
-      this.props.onSelectItem(this.props.stateKey, newSelected);
-    }
-
-  },
-  renderOptions: function(item) {
-
-    var itemChecked = false;
-
-    if (!!this.state.selected.includes(item)) {
-      itemChecked = true;
-
-    }
-
-    var cssId = this.props.stateKey + "_" + item;
-    //id and htmlfor must match for css, must also be unique
-
-    return (
-
-      <p key={ item }>
-        <input type="checkbox" className="filled-in" id={ cssId } data-item={ item } checked={ itemChecked } onChange={ this.handleChange } />
-        <label htmlFor={ cssId }>
-          { item }
-        </label>
-      </p>);
-  },
-  render: function() {
-
-    var multiselectorDivStyle = {
-      marginBottom: "1rem"
-    };
-
-    var classes = "input-field col s6 offset-s2 " + this.props.ftestClass;
-
-    return ( <div className={ classes } style={ multiselectorDivStyle }>
-               { this.props.items.map(this.renderOptions) }
-             </div>);
-  }
-
-});
+var roundToTwo = require('common/utils.js').roundToTwo;
+var validateAmount = require('common/utils.js').validateAmount;
+var userData = require('common/utils.js').userData;
+var tripData = require('common/utils.js').tripData;
 
 var ButtonGroupSelect = React.createClass({
   propTypes: {
@@ -142,6 +73,87 @@ var ButtonGroupSelect = React.createClass({
   }
 
 });
+
+var MultiSelector = React.createClass({
+  propTypes: {
+    stateKey: React.PropTypes.string.isRequired,
+    items: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+    onSelectItem: React.PropTypes.func.isRequired,
+    selectionMode: React.PropTypes.oneOf(["multiple", "single"]),
+    ftestClass: React.PropTypes.string.isRequired
+  },
+  getInitialState: function() {
+    return {
+      selected: this.props.selected
+    };
+  },
+  handleChange: function(event) {
+
+    var checkedWillBe = event.target.checked;
+    var newSelected = this.state.selected;
+    var itemId = event.target.getAttribute("data-item");
+
+    if (checkedWillBe === true) {
+
+      if (this.props.selectionMode === "single") {
+        newSelected = [];
+      }
+
+      newSelected.push(itemId);
+
+    } else {
+
+      var index = newSelected.indexOf(itemId);
+      if (index > -1) {
+        newSelected.splice(index, 1);
+      }
+    }
+
+    this.setState({
+      selected: newSelected
+    });
+
+    if (!!this.props.onSelectItem) {
+      this.props.onSelectItem(this.props.stateKey, newSelected);
+    }
+
+  },
+  renderOptions: function(item) {
+
+    var itemChecked = false;
+
+    if (!!this.state.selected.includes(item)) {
+      itemChecked = true;
+
+    }
+
+    var cssId = this.props.stateKey + "_" + item;
+    //id and htmlfor must match for css, must also be unique
+
+    return (
+
+      <p key={ item }>
+        <input type="checkbox" className="filled-in" id={ cssId } data-item={ item } checked={ itemChecked } onChange={ this.handleChange } />
+        <label htmlFor={ cssId }>
+          { item }
+        </label>
+      </p>);
+  },
+  render: function() {
+
+    var multiselectorDivStyle = {
+      marginBottom: "1rem"
+    };
+
+    var classes = "input-field col s6 offset-s2 " + this.props.ftestClass;
+
+    return ( <div className={ classes } style={ multiselectorDivStyle }>
+               { this.props.items.map(this.renderOptions) }
+             </div>);
+  }
+
+});
+
 
 var Shared = React.createClass({
   yes: function(e) {
@@ -238,11 +250,11 @@ var SplitAmountInput = React.createClass({
     var newSplitAmountInputState = {};
     var newInputState = {};
 
-    if (itemId == "Me") {
+    if (itemId === "Me") {
       itemId = userData.name;
     }
 
-    if (newValue == "") {
+    if (newValue === "") {
       newValue = 0;
     }
     newInputState[itemId] = newValue;
@@ -259,7 +271,7 @@ var SplitAmountInput = React.createClass({
 
     var itemValue = item;
 
-    if (item == "Me") {
+    if (item === "Me") {
       itemValue = userData.name;
     }
 
@@ -323,30 +335,16 @@ var DescriptionInput = React.createClass({
   }
 });
 
-var Expense = React.createClass({
-  render: function() {
-
-    console.log(this.props.data.expenseId);
-
-    return (
-      <li className="collection-item avatar">
-        <Link to={ "/expense/" + this.props.data.expenseId }>
-        <img src="images/Icecream.png" className="circle" />
-        <span className="title">${ this.props.data.amount }</span>
-        <p>
-          { this.props.data.description }
-        </p>
-        </Link>
-      </li>            );
-  }
-});
 
 var AddExpensePage = React.createClass({
   previousStateIfExists: null,
   getInitialState: function() {
 
+//change serverId to datetime stamp
     var initialState = {
-      expenseId: window.expenseId,
+      tripId : 2,
+      serverId:null,
+      expenseId: Date.now(),
       amount: "",
       description: "",
       shared: "Yes",
@@ -363,9 +361,11 @@ var AddExpensePage = React.createClass({
     if (!!this.props.params.expenseId) { //if expenseId has been passed in, it is an edits
 
       var paramExpenseId = this.props.params.expenseId;
-      initialState = store.getState().data.filter(function(obj) {
 
-        if (obj.expenseId == paramExpenseId) {
+      //change to action and remove global state for store
+      initialState = store.getState().expenses.filter(function(obj) {
+
+        if (obj.expenseId === paramExpenseId) {
           return obj;
         }
       });
@@ -378,7 +378,16 @@ var AddExpensePage = React.createClass({
   },
   delete() {
 
-    store.dispatch({
+    console.log("this.state.serverId : " + this.state.serverId);
+
+// this.props.dispatch(
+
+//        deleteExpense(this.state.serverId)
+
+//         );
+    
+
+    this.props.dispatch({
       type: "DELETE_EXPENSE",
       data: this.state
     });
@@ -390,13 +399,13 @@ var AddExpensePage = React.createClass({
 
     var newState = this.state;
 
-    if (this.state.split == "Equally") {
+    if (this.state.split === "Equally") {
 
       var numOfPeopleSharing = null;
       var peopleArr = null;
       var newSplitAmount = {};
 
-      if (newState.amongst == "All") {
+      if (newState.amongst === "All") {
         numOfPeopleSharing = tripData.people.length;
         peopleArr = tripData.people;
 
@@ -422,20 +431,34 @@ var AddExpensePage = React.createClass({
       editExpenseState.previousState = this.previousStateIfExists;
       editExpenseState.newState = newState;
 
-      store.dispatch({
+      this.props.dispatch({
         type: "EDIT_EXPENSE",
         data: editExpenseState
       });
 
+       // this.props.dispatch(
+
+       //  editExpense(newState)
+
+       //  );
+
     } else { // else new expese
 
-      expenseId += 1;
-
-      //not supposed to do store.dispatch directly?
-      store.dispatch({
+      this.props.dispatch({
         type: "NEW_EXPENSE",
         data: newState
       });
+
+      console.log("newState in add Expense");
+      console.log(newState);
+
+      // this.props.dispatch(
+
+      //   newExpense(newState)
+
+      //   );
+
+      console.log("this.props.dispatch : " + this.props.dispatch);
 
     }
 
@@ -482,7 +505,7 @@ var AddExpensePage = React.createClass({
       );
     }
 
-    if (this.state.split == "Differently") {
+    if (this.state.split === "Differently") {
       splitFields = (
         <SplitAmountInput stateKey="splitAmount" items={ splitAmountInputPeople } initialValue={ this.state.splitAmount } onSelectItem={ this.updateAddExpensePage } />
       );
@@ -530,3 +553,7 @@ var AddExpensePage = React.createClass({
   }
 
 });
+
+var AddExpensePage = connect()(AddExpensePage);
+
+module.exports = AddExpensePage;

@@ -1,6 +1,9 @@
 
 var gulp = require("gulp");
 var browserify = require("browserify");
+var source = require('vinyl-source-stream');
+var babelify = require('babelify');
+
 var del = require("del");
 
 var plugins = require("gulp-load-plugins")();
@@ -19,41 +22,52 @@ gulp.task("styles", function() {
     .pipe(plugins.connect.reload());
 });
 
-gulp.task("templates", function() {
-  return gulp.src([
-    "app/js/components/jsx/navbarComponent.jsx",
-    "app/js/components/jsx/expense/*.jsx",
-    "app/js/components/jsx/ledger/*.jsx",
-    "app/js/components/jsx/appRedux.jsx",
-    "app/js/components/jsx/router.jsx"])
-    .pipe(plugins.concat("components.js"))
-    .pipe(plugins.babel({
-      plugins: ["transform-react-jsx"]
-    }))
-    .pipe(gulp.dest("app/js/components/js"))
-    .pipe(plugins.connect.reload());
+// gulp.task("templates", function() {
+//   return gulp.src([
+//     "app/js/components/**/*"])
+//   .pipe(plugins.concat("components.js"))
+//     .pipe(plugins.babel({
+//       plugins: ["transform-react-jsx"]
+//     }))
+//     .pipe(gulp.dest("app/js/components"))
+//     .pipe(plugins.connect.reload());
+// });
+
+gulp.task('browserify', function() {
+    return browserify({
+        entries: ['app/js/app.js'],
+        paths: ['./node_modules','./app/js/']
+    })
+    .transform("babelify", {presets: ["react"]})
+        .bundle()
+        //Pass desired output filename to vinyl-source-stream
+        .pipe(source('main.min.js'))
+        // Start piping stream to tasks!
+        .pipe(gulp.dest('dist/js/'));
 });
 
-gulp.task("js", ["templates"], function() {
-  return gulp.src(["main.js",
-    //  order matters!
-    "app/js/lib/jquery-3.1.0.slim.js",
-    "app/js/lib/react.js",
-    "app/js/lib/react-dom.js",
-    "app/js/lib/redux.js",
-    "app/js/lib/react-redux.js",
-    "app/js/lib/ReactRouter.min.js",
-    "app/js/common/utils.js",
-    "app/js/components/js/*.js",
-    "app/js/common/router.js",
-    "app/js/components/lib/materialize.js"])
-    .pipe(plugins.concat("main.js"))
-    .pipe(plugins.rename({
-      suffix: ".min"
-    }))
-    .pipe(gulp.dest("dist/js/"))
-    .pipe(plugins.connect.reload());
-});
+// gulp.task("js", ["templates"], function() {
+//   return gulp.src(["main.min.js",
+//     //  order matters!
+//     "app/js/lib/react.js",
+//     "app/js/lib/react-dom.js",
+//     "app/js/lib/redux.js",
+//     "app/js/lib/react-redux.js",
+//     "app/js/lib/ReactRouter.min.js",
+//     "app/js/lib/redux-thunk.js",
+//     "app/js/lib/es6-promise.js",
+//     "app/js/lib/fetch.js",
+//     "app/js/common/utils.js",
+//     "app/js/components/js/components.js",
+//     "app/js/common/router.js",
+//     "app/js/components/lib/materialize.js"])
+//     .pipe(plugins.concat("main.js"))
+//     .pipe(plugins.rename({
+//       suffix: ".min"
+//     }))
+//     .pipe(gulp.dest("dist/js/"))
+//     .pipe(plugins.connect.reload());
+// });
 
 gulp.task("html", function() {
   return gulp.src("app/index.html")
@@ -85,7 +99,7 @@ gulp.task("clean", function() {
 
 gulp.task("default", ["clean"], function() {
 
-  return gulp.start("fonts", "images", "templates", "styles", "js", "html", "connect", "watch");
+  return gulp.start("fonts", "images", "styles", "browserify", "html", "connect", "watch");
 });
 
 gulp.task("connect", function() {
@@ -103,13 +117,9 @@ gulp.task("watch", ["connect"], function() {
 
   gulp.watch("app/css/**/*.scss", ["styles"]);
 
-  // Watch .jsx files
+  // Watch .js(x) files
 
-  gulp.watch("app/js/components/jsx/*.jsx", ["templates"]);
-
-  // Watch .js files
-
-  gulp.watch("app/js/**/*.js", ["js"]);
+  gulp.watch("app/js/**/*", ["browserify"]);
 
   // Watch .html file
 

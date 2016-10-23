@@ -1,3 +1,6 @@
+var connect = require('react-redux').connect;
+var ExpensesList = require('components/expense/expensesListComponent.jsx');
+
 var expensesListInitialState = [{
   expenseId: 0,
   amongst: "All",
@@ -15,7 +18,16 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
   switch (action.type) {
 
+    case "RECEIVE_EXPENSES" :
+    console.log(action.expenses);
+
+    var newState = Object.assign([],action.expenses);
+    return newState;
+
+
     case "NEW_EXPENSE":
+
+    console.log(JSON.stringify(action.data));
 
       var newExpenses = state.concat([action.data]);
       var newState = Object.assign([], state, newExpenses);
@@ -27,7 +39,7 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
       var newState = Object.assign([], state);
 
       var indexOfObj = newState.findIndex(function(obj) {
-        if (obj.expenseId == action.data.newState.expenseId) {
+        if (obj.expenseId === action.data.newState.expenseId) {
           return true;
         }
 
@@ -42,7 +54,7 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
       var newState = Object.assign([], state);
 
       var indexOfObj = newState.findIndex(function(obj) {
-        if (obj.expenseId == action.data.expenseId) {
+        if (obj.expenseId === action.data.expenseId) {
           return true;
         }
 
@@ -54,6 +66,26 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
       return newState;
 
+      case "UPDATE_EXPENSE_SERVER_ID":
+
+      //to be reformatted, to close to edit expense
+
+       var newState = Object.assign([], state);
+
+      var indexOfObj = newState.findIndex(function(obj) {
+        if (obj.expenseId === action.data.expenseId) {
+          return true;
+        }
+
+      });
+
+       newState[indexOfObj] = action.data;
+
+      console.log("UPDATE_EXPENSE_SERVER_ID : ");
+      console.log(newState);
+
+      return newState;
+
     default:
 
       return state;
@@ -61,11 +93,5 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
 };
 
-var mapStateToExpensesListProps = function(state) {
-  return {
-    data: state.data
-  };
-};
-
-var ExpensesList = connect(mapStateToExpensesListProps)(ExpensesList);
+module.exports = expensesListReducer;
 

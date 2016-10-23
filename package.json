@@ -3,10 +3,6 @@
   "version": "",
   "description": "",
   "author": "Rachel",
-  "dependencies": {
-    "react": "x.x.x",
-    "browserify": "x.x.x"
-  },
   "devDependencies": {
     "del": "x.x.x",
     "gulp": "^3.9.1",
@@ -28,6 +24,24 @@
     "gulp-webdriver":"x.x.x",
     "wdio-jasmine-framework" :"x.x.x",
     "wdio-selenium-standalone-service":"x.x.x",
-    "tiny-lr": "x.x.x"
+    "tiny-lr": "x.x.x",
+    "express" : "x.x.x",
+    "body-parser": "x.x.x",
+    "cors": "x.x",
+    "multer": "x.x.x",
+    "request": "x.x.x",
+    "couchbase" : "x.x.x",
+    "redux-thunk" : "x.x.x",
+    "isomorphic-fetch" : "x.x.x",
+    "es6-promise" : "x.x.x",
+    "browserify" : "x.x.x",
+    "vinyl-source-stream" : "x.x.x",
+    "babelify" : "x.x.x",
+    "babel-preset-react" : "x.x.x",
+    "react-router" : "x.x.x",
+    "react" : "x.x.x",
+    "react-redux" : "x.x.x",
+    "react-dom" : "x.x.x",
+    "redux" : "x.x.x"
   }
 }
