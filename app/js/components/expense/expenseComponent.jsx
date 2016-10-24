@@ -1,12 +1,9 @@
-var React = require("react");
-var Link = require('react-router').Link;
+const React = require("react");
+const Link = require('react-router').Link;
 
-var Expense = React.createClass({
-  render: function() {
+class Expense extends React.Component {
 
-    console.log(this.props);
-    console.log(this.props.data.expenseId);
-
+  render() {
     return (
       <li className="collection-item avatar">
         <Link to={ "/expense/" + this.props.data.expenseId }>
@@ -16,8 +13,10 @@ var Expense = React.createClass({
           { this.props.data.description }
         </p>
         </Link>
-      </li>            );
+      </li> );
   }
-});
+};
+
+//todo propTypes
 
 module.exports = Expense;

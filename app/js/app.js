@@ -1,22 +1,28 @@
-var createStore = require('redux').createStore;
-var applyMiddleware = require('redux').applyMiddleware;
-var combineReducers = require('redux').combineReducers;
-var thunk = require('redux-thunk').default
-var Router = require('react-router').Router
-var Route = require('react-router').Route
-var Provider = require('react-redux').Provider
-var BrowserHistory = require('react-router').browserHistory
-var React = require("react");
-var ReactDOM = require("react-dom");
+const {
+  createStore,
+  applyMiddleware,
+  combineReducers
+} = require('redux');
 
-var expensesListReducer = require('components/expense/expensesListRedux.js');
-var ledgerReducer = require('components/ledger/ledgerRedux.js');
+const {
+  Router,
+  Route,
+  browserHistory
+} = require('react-router');
 
-var ExpensesListPage = require('components/expense/expensesListPageComponent.jsx');
-var AddExpensePage = require('components/expense/addExpensePageComponent.jsx');
-var LedgerPage = require('components/ledger/ledgerComponent.jsx');
+const Provider = require('react-redux').Provider;
+const thunk = require('redux-thunk').default
+const React = require("react");
+const ReactDOM = require("react-dom");
 
-var app = combineReducers({
+const expensesListReducer = require('components/expense/expensesListRedux.js');
+const ledgerReducer = require('components/ledger/ledgerRedux.js');
+
+const ExpensesListPage = require('components/expense/expensesListPageComponent.jsx');
+const AddExpensePage = require('components/expense/addExpensePageComponent.jsx');
+const LedgerPage = require('components/ledger/ledgerComponent.jsx');
+
+const app = combineReducers({
 	// trips : tripsListReducer
   expenses: expensesListReducer,
   ledger: ledgerReducer,
@@ -28,7 +34,7 @@ global.store = createStore(app,applyMiddleware(thunk));
 ReactDOM.render((
 
   <Provider store={ store }>
-    <Router history={ BrowserHistory }>
+    <Router history={ browserHistory }>
       <Route path="/" component={ ExpensesListPage } />
       <Route path="addExpense" component={ AddExpensePage } />
       <Route path="/expense/:expenseId" component={ AddExpensePage } />

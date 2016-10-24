@@ -1,4 +1,4 @@
-var ledgerInitialState = {
+let ledgerInitialState = {
   fatpaws: {
     browncat: 0,
     calico: 0
@@ -14,14 +14,14 @@ var ledgerInitialState = {
 
 };
 
-var minusExpense = function(state, action) {
+let minusExpense = function(state, action) {
 
-  var newState = Object.assign({}, state);
-  var actionData = (!!action.data.previousState) ? action.data.previousState : action.data;
-  var owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
-  var peopleSharingExpense = actionData.splitAmount;
+  let newState = Object.assign({}, state);
+  let actionData = (!!action.data.previousState) ? action.data.previousState : action.data;
+  let owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
+  let peopleSharingExpense = actionData.splitAmount;
 
-  for (var person in peopleSharingExpense) {
+  for (let person in peopleSharingExpense) {
 
     if (person === "Me") {
       person = userData.name;
@@ -36,14 +36,14 @@ var minusExpense = function(state, action) {
   return newState;
 }
 
-var addExpense = function(state, action) {
+let addExpense = function(state, action) {
 
-  var newState = Object.assign({}, state);
-  var actionData = (!!action.data.newState) ? action.data.newState : action.data;
-  var owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
-  var peopleSharingExpense = actionData.splitAmount;
+  let newState = Object.assign({}, state);
+  let actionData = (!!action.data.newState) ? action.data.newState : action.data;
+  let owesWho = (actionData.paidBy === "Me") ? userData.name : actionData.paidByWho[0];
+  let peopleSharingExpense = actionData.splitAmount;
 
-  for (var person in peopleSharingExpense) {
+  for (let person in peopleSharingExpense) {
 
     if (person === "Me") {
       person = userData.name;
@@ -58,24 +58,26 @@ var addExpense = function(state, action) {
   return newState;
 }
 
-var ledgerReducer = function(state = ledgerInitialState, action) {
+let ledgerReducer = function(state = ledgerInitialState, action) {
+
+  let newState;
 
   switch (action.type) {
 
     case "EDIT_EXPENSE":
 
-      var newState = minusExpense(state, action);
+      newState = minusExpense(state, action);
       newState = addExpense(newState, action);
       return newState;
 
     case "NEW_EXPENSE":
 
-      var newState = addExpense(state, action);
+      newState = addExpense(state, action);
       return newState;
 
     case "DELETE_EXPENSE":
 
-      var newState = minusExpense(state, action);
+      newState = minusExpense(state, action);
       return newState;
 
     default:

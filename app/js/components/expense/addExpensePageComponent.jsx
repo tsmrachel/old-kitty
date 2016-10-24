@@ -1,42 +1,32 @@
-var React = require("react");
-var BrowserHistory = require('react-router').browserHistory
-var connect = require('react-redux').connect;
+const React = require("react");
+const browserHistory = require("react-router").browserHistory
+const connect = require("react-redux").connect;
+const Navbar = require("components/navbarComponent.jsx");
 
-var Navbar = require('components/navbarComponent.jsx');
+const {roundToTwo, validateAmount, userData, tripData} = require("common/utils.js");
 
-var roundToTwo = require('common/utils.js').roundToTwo;
-var validateAmount = require('common/utils.js').validateAmount;
-var userData = require('common/utils.js').userData;
-var tripData = require('common/utils.js').tripData;
+class ButtonGroupSelect extends React.Component {
 
-var ButtonGroupSelect = React.createClass({
-  propTypes: {
-    stateKey: React.PropTypes.string.isRequired,
-    initialSelected: React.PropTypes.string.isRequired,
-    title: React.PropTypes.string.isRequired,
-    items: React.PropTypes.arrayOf(React.PropTypes.shape({
-      label: React.PropTypes.string.isRequired
-    })).isRequired,
-    onSelectItem: React.PropTypes.func.isRequired,
-    ftestClass: React.PropTypes.string.isRequired
-
-  },
-  getInitialState: function() {
-    return {
-      selectedLabel: this.props.initialSelected
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+    this.renderButtonGroup = this.renderButtonGroup.bind(this);
+    this.state = {
+      selectedLabel: props.initialSelected
     };
-  },
-  onClick: function(e) {
+  };
 
-    var ButtonGroupSelectValue = e.target.getAttribute("data-Value");
+  onClick(e) {
+
+    let buttonGroupSelectValue = e.target.getAttribute("data-Value");
 
     this.setState({
-      selectedLabel: ButtonGroupSelectValue
+      selectedLabel: buttonGroupSelectValue
     });
 
-    var item = this.props.items.find(function(item) {
+    let item = this.props.items.find(function(item) {
 
-      if (item.label === ButtonGroupSelectValue) {
+      if (item.label === buttonGroupSelectValue) {
         return item;
       }
     });
@@ -46,13 +36,14 @@ var ButtonGroupSelect = React.createClass({
     }
 
     if (!!this.props.onSelectItem) {
-      this.props.onSelectItem(this.props.stateKey, ButtonGroupSelectValue);
+      this.props.onSelectItem(this.props.stateKey, buttonGroupSelectValue);
     }
 
-  },
-  renderButtonGroup: function(item) {
+  };
 
-    var buttonClasses = "waves-effect waves-light btn-large";
+  renderButtonGroup(item) {
+
+    let buttonClasses = "waves-effect waves-light btn-large";
 
     if (item.label !== this.state.selectedLabel) {
       buttonClasses += " disabled";
@@ -61,37 +52,48 @@ var ButtonGroupSelect = React.createClass({
     return ( <button data-Value={ item.label } key={ item.label } onClick={ this.onClick } className={ buttonClasses }>
                { item.label }
              </button>);
-  },
-  render: function() {
+  };
 
-    var buttonGroupSelectclasses = "input-field col s12 valign-wrapper " + this.props.ftestClass;
+  render() {
+
+    let buttonGroupSelectclasses = "input-field col s12 valign-wrapper " + this.props.ftestClass;
 
     return ( <div className={ buttonGroupSelectclasses }>
                <span className="col s1 valign">{ this.props.title }</span>
                <span className="col s10 offset-s1">{ this.props.items.map(this.renderButtonGroup) }</span>
              </div>);
-  }
+  };
 
-});
+};
 
-var MultiSelector = React.createClass({
-  propTypes: {
-    stateKey: React.PropTypes.string.isRequired,
-    items: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
-    onSelectItem: React.PropTypes.func.isRequired,
-    selectionMode: React.PropTypes.oneOf(["multiple", "single"]),
-    ftestClass: React.PropTypes.string.isRequired
-  },
-  getInitialState: function() {
-    return {
-      selected: this.props.selected
+ButtonGroupSelect.propTypes = {
+  stateKey: React.PropTypes.string.isRequired,
+  initialSelected: React.PropTypes.string.isRequired,
+  title: React.PropTypes.string.isRequired,
+  items: React.PropTypes.arrayOf(React.PropTypes.shape({
+    label: React.PropTypes.string.isRequired
+  })).isRequired,
+  onSelectItem: React.PropTypes.func.isRequired,
+  ftestClass: React.PropTypes.string.isRequired
+
+};
+
+class MultiSelector extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.renderOptions = this.renderOptions.bind(this);
+    this.state = {
+      selected: props.selected
     };
-  },
-  handleChange: function(event) {
+  };
 
-    var checkedWillBe = event.target.checked;
-    var newSelected = this.state.selected;
-    var itemId = event.target.getAttribute("data-item");
+  handleChange(event) {
+
+    let checkedWillBe = event.target.checked;
+    let newSelected = this.state.selected;
+    let itemId = event.target.getAttribute("data-item");
 
     if (checkedWillBe === true) {
 
@@ -103,7 +105,7 @@ var MultiSelector = React.createClass({
 
     } else {
 
-      var index = newSelected.indexOf(itemId);
+      let index = newSelected.indexOf(itemId);
       if (index > -1) {
         newSelected.splice(index, 1);
       }
@@ -117,17 +119,18 @@ var MultiSelector = React.createClass({
       this.props.onSelectItem(this.props.stateKey, newSelected);
     }
 
-  },
-  renderOptions: function(item) {
+  };
 
-    var itemChecked = false;
+  renderOptions(item) {
+
+    let itemChecked = false;
 
     if (!!this.state.selected.includes(item)) {
       itemChecked = true;
 
     }
 
-    var cssId = this.props.stateKey + "_" + item;
+    let cssId = this.props.stateKey + "_" + item;
     //id and htmlfor must match for css, must also be unique
 
     return (
@@ -138,71 +141,72 @@ var MultiSelector = React.createClass({
           { item }
         </label>
       </p>);
-  },
-  render: function() {
+  };
 
-    var multiselectorDivStyle = {
+  render() {
+
+    let multiselectorDivStyle = {
       marginBottom: "1rem"
     };
 
-    var classes = "input-field col s6 offset-s2 " + this.props.ftestClass;
+    let classes = "input-field col s6 offset-s2 " + this.props.ftestClass;
 
     return ( <div className={ classes } style={ multiselectorDivStyle }>
                { this.props.items.map(this.renderOptions) }
              </div>);
-  }
+  };
 
-});
+};
 
+MultiSelector.propTypes = {
+  stateKey: React.PropTypes.string.isRequired,
+  items: React.PropTypes.arrayOf(React.PropTypes.string).isRequired,
+  onSelectItem: React.PropTypes.func.isRequired,
+  selectionMode: React.PropTypes.oneOf(["multiple", "single"]),
+  ftestClass: React.PropTypes.string.isRequired
+};
 
-var Shared = React.createClass({
-  yes: function(e) {
-    console.log("yay!");
-
-  },
-  render: function() {
-
-    return ( <ButtonGroupSelect {...this.props } title="Shared" items={ [{ label: "Yes", onItemClick: this.yes }, { label: "No", onItemClick: null }] } />
+class Shared extends React.Component {
+  render() {
+    return ( <ButtonGroupSelect {...this.props } title="Shared" items={ [{ label: "Yes", onItemClick: null }, { label: "No", onItemClick: null }] } />
       );
   }
-});
+};
 
-var Amongst = React.createClass({
-  render: function() {
+class Amongst extends React.Component {
+  render() {
     return ( <ButtonGroupSelect {...this.props } title="Amongst" items={ [{ label: "All", onItemClick: null }, { label: "Some", onItemClick: null }] } />
       );
   }
-});
+};
 
-var Split = React.createClass({
-  render: function() {
+class Split extends React.Component {
+  render() {
     return ( <ButtonGroupSelect {...this.props } title="Split" items={ [{ label: "Equally", onItemClick: null }, { label: "Differently", onItemClick: null }] } />
       );
   }
-});
+};
 
-var PaidBy = React.createClass({
-  render: function() {
+class PaidBy extends React.Component {
+  render() {
     return ( <ButtonGroupSelect {...this.props } title="PaidBy" items={ [{ label: "Me", onItemClick: null }, { label: "Someone Else", onItemClick: null }] } />
       );
   }
-});
+};
 
-var AmountInput = React.createClass({
-  propTypes: {
-    stateKey: React.PropTypes.string.isRequired,
-    onSelectItem: React.PropTypes.func.isRequired,
+class AmountInput extends React.Component {
 
-  },
-  getInitialState: function() {
-    return {
-      value: this.props.initialValue
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      value: props.initialValue
     };
-  },
-  handleChange: function(event) {
+  };
 
+  handleChange(event) {
     //to do : input validation
-    var newValue = event.target.value;
+    let newValue = event.target.value;
 
     if (validateAmount(newValue)) {
       this.setState({
@@ -214,8 +218,9 @@ var AmountInput = React.createClass({
       }
 
     }
-  },
-  render: function() {
+  };
+
+  render() {
 
     return ( <div className="input-field col s12">
                <label htmlFor="amountInput" className="active">
@@ -224,13 +229,22 @@ var AmountInput = React.createClass({
                <input type="number" value={ this.state.value } onChange={ this.handleChange } id="amountInput" className="ftest-amountInput" />
              </div>
       );
-  }
-});
+  };
+};
 
-var SplitAmountInput = React.createClass({
-  getInitialState: function() {
+AmountInput.propTypes = {
+  stateKey: React.PropTypes.string.isRequired,
+  onSelectItem: React.PropTypes.func.isRequired,
+};
 
-    var newState = Object.assign({}, this.props.initialValue);
+class SplitAmountInput extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.renderSplitAmountGroup = this.renderSplitAmountGroup.bind(this);
+
+    let newState = Object.assign({}, this.props.initialValue);
 
     tripData.people.map(function(person) {
 
@@ -240,15 +254,16 @@ var SplitAmountInput = React.createClass({
 
     });
 
-    return newState;
-  },
-  handleChange: function(event) {
+    this.state = newState;
+  };
+
+  handleChange(event) {
 
     //to do : input validation
-    var newValue = event.target.value;
-    var itemId = event.target.getAttribute("data-itemId");
-    var newSplitAmountInputState = {};
-    var newInputState = {};
+    let newValue = event.target.value;
+    let itemId = event.target.getAttribute("data-itemId");
+    let newSplitAmountInputState = {};
+    let newInputState = {};
 
     if (itemId === "Me") {
       itemId = userData.name;
@@ -265,17 +280,18 @@ var SplitAmountInput = React.createClass({
 
       this.props.onSelectItem(this.props.stateKey, newSplitAmountInputState);
     }
-  // }
-  },
-  renderSplitAmountGroup: function(item) {
 
-    var itemValue = item;
+  };
+
+  renderSplitAmountGroup(item) {
+
+    let itemValue = item;
 
     if (item === "Me") {
       itemValue = userData.name;
     }
 
-    var itemHtmlFor = this.props.stateKey + "_" + item;
+    let itemHtmlFor = this.props.stateKey + "_" + item;
 
     return ( <div key={ item } className="input-field">
                <input type="number" data-itemId={ item } value={ this.state[itemValue] } onChange={ this.handleChange } id={ itemHtmlFor } />
@@ -283,10 +299,11 @@ var SplitAmountInput = React.createClass({
                  { item }
                </label>
              </div>);
-  },
-  render: function() {
+  };
 
-    var splitAmountInputDivStyle = {
+  render() {
+
+    let splitAmountInputDivStyle = {
       marginTop: "2rem",
       marginBottom: "2rem"
     };
@@ -295,25 +312,23 @@ var SplitAmountInput = React.createClass({
                { this.props.items.map(this.renderSplitAmountGroup) }
              </div>
       );
-  }
+  };
+};
 
-});
+class DescriptionInput extends React.Component {
 
-var DescriptionInput = React.createClass({
-  propTypes: {
-    stateKey: React.PropTypes.string.isRequired,
-    onSelectItem: React.PropTypes.func.isRequired,
-
-  },
-  getInitialState: function() {
-    return {
-      value: this.props.initialValue
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      value: props.initialValue
     };
-  },
-  handleChange: function(event) {
+  };
+
+  handleChange(event) {
 
     //to do : input validation
-    var newValue = event.target.value;
+    let newValue = event.target.value;
 
     this.setState({
       value: newValue
@@ -322,9 +337,9 @@ var DescriptionInput = React.createClass({
     if (!!this.props.onSelectItem) {
       this.props.onSelectItem(this.props.stateKey, newValue);
     }
-  // }
-  },
-  render: function() {
+  };
+
+  render() {
     return ( <div className="input-field col s12">
                <label htmlFor="descriptionInput" className="active">
                  Description
@@ -332,18 +347,26 @@ var DescriptionInput = React.createClass({
                <input type="text" value={ this.state.value } onChange={ this.handleChange } id="descriptionInput" className="ftest-descriptionInput" />
              </div>
       );
-  }
-});
+  };
+};
 
+DescriptionInput.propTypes = {
+  stateKey: React.PropTypes.string.isRequired,
+  onSelectItem: React.PropTypes.func.isRequired,
+};
 
-var AddExpensePage = React.createClass({
-  previousStateIfExists: null,
-  getInitialState: function() {
+class AddExpensePage extends React.Component {
 
-//change serverId to datetime stamp
-    var initialState = {
-      tripId : 2,
-      serverId:null,
+  constructor(props) {
+    super(props);
+    this.onDelete = this.onDelete.bind(this);
+    this.onSave = this.onSave.bind(this);
+    this.updateAddExpensePage = this.updateAddExpensePage.bind(this);
+    this.previousStateIfExists = null;
+
+    let initialState = {
+      tripId: 2,
+      serverId: null,
       expenseId: Date.now(),
       amount: "",
       description: "",
@@ -358,14 +381,14 @@ var AddExpensePage = React.createClass({
 
     //todo : clean up
 
-    if (!!this.props.params.expenseId) { //if expenseId has been passed in, it is an edits
+    if (!!props.params.expenseId) { //if expenseId has been passed in, it is an edits
 
-      var paramExpenseId = this.props.params.expenseId;
-
+      let paramExpenseId = props.params.expenseId;
       //change to action and remove global state for store
       initialState = store.getState().expenses.filter(function(obj) {
 
-        if (obj.expenseId === paramExpenseId) {
+        //one side is returning int
+        if (obj.expenseId.toString() === paramExpenseId.toString()) {
           return obj;
         }
       });
@@ -373,37 +396,38 @@ var AddExpensePage = React.createClass({
       this.previousStateIfExists = initialState;
 
     }
+    this.state = initialState;
 
-    return initialState;
-  },
-  delete() {
+  };
+
+  onDelete() {
 
     console.log("this.state.serverId : " + this.state.serverId);
 
-// this.props.dispatch(
+    // this.props.dispatch(
 
-//        deleteExpense(this.state.serverId)
+    //        deleteExpense(this.state.serverId)
 
-//         );
-    
+    //         );
 
     this.props.dispatch({
       type: "DELETE_EXPENSE",
       data: this.state
     });
 
-    BrowserHistory.push("/");
+    browserHistory.push("/");
 
-  },
-  save() {
+  };
 
-    var newState = this.state;
+  onSave() {
+
+    let newState = this.state;
 
     if (this.state.split === "Equally") {
 
-      var numOfPeopleSharing = null;
-      var peopleArr = null;
-      var newSplitAmount = {};
+      let numOfPeopleSharing = null;
+      let peopleArr = null;
+      let newSplitAmount = {};
 
       if (newState.amongst === "All") {
         numOfPeopleSharing = tripData.people.length;
@@ -415,7 +439,7 @@ var AddExpensePage = React.createClass({
         peopleArr = newState.amongstWho;
       }
 
-      var eachPersonPaid = roundToTwo(newState.amount / numOfPeopleSharing);
+      let eachPersonPaid = roundToTwo(newState.amount / numOfPeopleSharing);
 
       peopleArr.forEach(function(person) {
         newSplitAmount[person] = eachPersonPaid;
@@ -427,7 +451,7 @@ var AddExpensePage = React.createClass({
 
     if (!!this.props.params.expenseId) { //if edit
 
-      var editExpenseState = {};
+      let editExpenseState = {};
       editExpenseState.previousState = this.previousStateIfExists;
       editExpenseState.newState = newState;
 
@@ -436,11 +460,11 @@ var AddExpensePage = React.createClass({
         data: editExpenseState
       });
 
-       // this.props.dispatch(
+      // this.props.dispatch(
 
-       //  editExpense(newState)
+      //  editExpense(newState)
 
-       //  );
+      //  );
 
     } else { // else new expese
 
@@ -462,36 +486,38 @@ var AddExpensePage = React.createClass({
 
     }
 
-    BrowserHistory.push("/");
+    browserHistory.push("/");
 
-  },
+  };
+
   updateAddExpensePage(stateKey, stateValue) {
     //setState is asynchronous
 
-    var newState = {};
+    let newState = {};
     newState[stateKey] = stateValue;
 
     this.setState(newState);
 
-  },
-  render: function() {
+  };
 
-    var splitAmountInputPeople = tripData.peopleWithMe;
-    var amongstFields = null;
-    var deleteButton = null;
-    var sharedFields = null;
-    var splitFields = null;
-    var paidByFields = null;
-    var deleteButtonDivStyle = {
+  render() {
+
+    let splitAmountInputPeople = tripData.peopleWithMe;
+    let amongstFields = null;
+    let deleteButton = null;
+    let sharedFields = null;
+    let splitFields = null;
+    let paidByFields = null;
+    let deleteButtonDivStyle = {
       marginTop: "2rem",
       marginBottom: "2rem"
     };
-    var upperMarginDivStyle = {
+    let upperMarginDivStyle = {
       marginTop: "2rem"
     };
 
     if (!!this.props.params.expenseId) {
-      deleteButton = (<button className="input-field waves-effect waves-light btn-large col s12 ftest-deleteButton" onClick={ this.delete } style={ deleteButtonDivStyle }>
+      deleteButton = (<button className="input-field waves-effect waves-light btn-large col s12 ftest-deleteButton" onClick={ this.onDelete } style={ deleteButtonDivStyle }>
                         Delete
                       </button>);
     }
@@ -543,17 +569,15 @@ var AddExpensePage = React.createClass({
           { sharedFields }
           <PaidBy stateKey="paidBy" initialSelected={ this.state.paidBy } onSelectItem={ this.updateAddExpensePage } ftestClass="ftest-paidBy" />
           { paidByFields }
-          <button className="waves-effect waves-light btn-large col s12 ftest-saveButton" onClick={ this.save } style={ upperMarginDivStyle }>
+          <button className="waves-effect waves-light btn-large col s12 ftest-saveButton" onClick={ this.onSave } style={ upperMarginDivStyle }>
             Save
           </button>
           { deleteButton }
         </div>
       </div>
       );
-  }
+  };
+};
 
-});
-
-var AddExpensePage = connect()(AddExpensePage);
-
+AddExpensePage = connect()(AddExpensePage);
 module.exports = AddExpensePage;

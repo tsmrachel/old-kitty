@@ -1,7 +1,4 @@
-var connect = require('react-redux').connect;
-var ExpensesList = require('components/expense/expensesListComponent.jsx');
-
-var expensesListInitialState = [{
+let expensesListInitialState = [{
   expenseId: 0,
   amongst: "All",
   amongstWho: [],
@@ -14,31 +11,33 @@ var expensesListInitialState = [{
   splitAmount: {}
 }];
 
-var expensesListReducer = function(state = expensesListInitialState, action) {
+let expensesListReducer = function(state = expensesListInitialState, action) {
+
+  let newState;
+  let indexOfObj;
 
   switch (action.type) {
 
-    case "RECEIVE_EXPENSES" :
-    console.log(action.expenses);
+    case "RECEIVE_EXPENSES":
+      console.log(action.expenses);
 
-    var newState = Object.assign([],action.expenses);
-    return newState;
-
+      newState = Object.assign([], action.expenses);
+      return newState;
 
     case "NEW_EXPENSE":
 
-    console.log(JSON.stringify(action.data));
+      console.log(JSON.stringify(action.data));
 
-      var newExpenses = state.concat([action.data]);
-      var newState = Object.assign([], state, newExpenses);
+      let newExpenses = state.concat([action.data]);
+      newState = Object.assign([], state, newExpenses);
 
       return newState;
 
     case "EDIT_EXPENSE":
 
-      var newState = Object.assign([], state);
+      newState = Object.assign([], state);
 
-      var indexOfObj = newState.findIndex(function(obj) {
+      indexOfObj = newState.findIndex(function(obj) {
         if (obj.expenseId === action.data.newState.expenseId) {
           return true;
         }
@@ -51,9 +50,9 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
     case "DELETE_EXPENSE":
 
-      var newState = Object.assign([], state);
+      newState = Object.assign([], state);
 
-      var indexOfObj = newState.findIndex(function(obj) {
+      indexOfObj = newState.findIndex(function(obj) {
         if (obj.expenseId === action.data.expenseId) {
           return true;
         }
@@ -66,20 +65,20 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
       return newState;
 
-      case "UPDATE_EXPENSE_SERVER_ID":
+    case "UPDATE_EXPENSE_SERVER_ID":
 
       //to be reformatted, to close to edit expense
 
-       var newState = Object.assign([], state);
+      newState = Object.assign([], state);
 
-      var indexOfObj = newState.findIndex(function(obj) {
+      indexOfObj = newState.findIndex(function(obj) {
         if (obj.expenseId === action.data.expenseId) {
           return true;
         }
 
       });
 
-       newState[indexOfObj] = action.data;
+      newState[indexOfObj] = action.data;
 
       console.log("UPDATE_EXPENSE_SERVER_ID : ");
       console.log(newState);
@@ -90,7 +89,6 @@ var expensesListReducer = function(state = expensesListInitialState, action) {
 
       return state;
   }
-
 };
 
 module.exports = expensesListReducer;

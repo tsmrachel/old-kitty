@@ -1,33 +1,35 @@
-var React = require("react");
-var Expense = require('components/expense/expenseComponent.jsx');
-var connect = require('react-redux').connect;
+const React = require("react");
+const Expense = require('components/expense/expenseComponent.jsx');
+const connect = require('react-redux').connect;
 
-var ExpensesList = React.createClass({
+class ExpensesList extends React.Component {
 
   //   componentDidMount() {
   //   this.props.dispatch(
   //     fetchExpenses()
   //   )
   // },
-  renderExpenses: function(expense) {
+
+  renderExpenses(expense) {
 
     return ( <Expense key={ expense.expenseId } data={ expense } /> );
-  },
-  render: function() {
+  };
+  
+  render() {
 
     return ( <ul className="collection ftest-expenseList">
                { this.props.data.map(this.renderExpenses) }
                </ul>
       );
   }
-});
+};
 
-var mapStateToExpensesListProps = function(state) {
+let mapStateToExpensesListProps = function(state) {
   return {
     data: state.expenses
   };
 };
 
-var ExpensesList = connect(mapStateToExpensesListProps)(ExpensesList);
+ExpensesList = connect(mapStateToExpensesListProps)(ExpensesList);
 
 module.exports = ExpensesList;

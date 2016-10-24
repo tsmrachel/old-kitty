@@ -1,21 +1,21 @@
-var React = require("react");
-var Link = require('react-router').Link;
+const React = require("react");
+const Link = require("react-router").Link;
 
-var Navbar = React.createClass({
-  render: function() {
+class Navbar extends React.Component {
+  render() {
 
-    var divStyle = {
+    let divStyle = {
       marginLeft: "5px"
-
     };
 
-    if (this.props.title === "Expenses") {
+    let rightMenu;
 
-      var rightMenu = ( <li>
-                          <Link to="/ledger">
-                          <img src="images/Financial.png" className="icon ftest-ledgerIcon" />
-                          </Link>
-                        </li>);
+    if (this.props.title === "Expenses") {
+      rightMenu = (<li>
+                      <Link to="/ledger">
+                        <img src="images/Financial.png" className="icon ftest-ledgerIcon" />
+                      </Link>
+                    </li>);
 
     }
 
@@ -29,6 +29,7 @@ var Navbar = React.createClass({
         </div>
       </nav>            );
   }
-});
+}
+;
 
 module.exports = Navbar;

@@ -1,19 +1,19 @@
-var React = require("react");
-var BrowserHistory = require('react-router').browserHistory
-var Navbar = require('components/navbarComponent.jsx');
-var ExpensesList = require('components/expense/expensesListComponent.jsx');
+const React = require("react");
+const browserHistory = require("react-router").browserHistory
+const Navbar = require("components/navbarComponent.jsx");
+const ExpensesList = require("components/expense/expensesListComponent.jsx");
 
-var ExpensesListPage = React.createClass({
+class ExpensesListPage extends React.Component {
 
-  _onClick: function() {
-    BrowserHistory.push("addExpense");
-  },
-  render: function() {
+  onClick() {
+    browserHistory.push("addExpense");
+  };
 
-    var divStyle = {
+  render() {
+
+    let divStyle = {
       bottom: "45px",
       right: "24px"
-
     };
 
     return (<div>
@@ -22,13 +22,13 @@ var ExpensesListPage = React.createClass({
                 <ExpensesList/>
               </div>
               <div className="fixed-action-btn" style={ divStyle }>
-                <button className="btn-floating btn-large red ftest-plusButton" onClick={ this._onClick }>
+                <button className="btn-floating btn-large red ftest-plusButton" onClick={ this.onClick }>
                   +
                 </button>
               </div>
             </div>
       );
-  }
-});
+  };
+};
 
 module.exports = ExpensesListPage;

@@ -2,7 +2,7 @@ function roundToTwo(num) {
   return +(Math.round(num + "e+2") + "e-2");
 }
 function validateAmount(input) {
-  var amountRegex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/;
+  let amountRegex = /(?=.)^\$?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+)?(\.[0-9]{1,2})?$/;
 
   return amountRegex.test(input);
 }
@@ -19,7 +19,7 @@ tripData = {
   // to be processed after data is pulled
   peopleWithMe: ["Me", "calico", "browncat"],
   otherPeople: ["calico", "browncat"]
-}
+};
 
 // function deleteExpense(serverId) {
 
@@ -53,7 +53,7 @@ tripData = {
 // }
 
 // function editExpense(expense) {
-//   var expenseJSON = JSON.stringify(expense);
+//   let expenseJSON = JSON.stringify(expense);
 
 //   return function(dispatch) {
 
@@ -87,7 +87,7 @@ tripData = {
 //   console.log("expense For Body : ");
 //   console.log(expense);
 
-//   var expenseJSON = JSON.stringify(expense);
+//   let expenseJSON = JSON.stringify(expense);
 
 //   return function(dispatch) {
 
